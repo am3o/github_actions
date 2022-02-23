@@ -2,6 +2,8 @@ name: Release
 
 on:
   push:
+    branches:
+      - "*"
     tags:
       - v*
 
@@ -21,6 +23,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    needs:
+      - test
 
     steps:
       - name: Checkout repository code
@@ -33,10 +37,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-    strategy:
-      fail-fast: false
-      matrix:
-        platforms: [ linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 ]
 
     steps:
       - name: Set up Go 1.17
@@ -72,7 +72,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          platforms: ${{ matrix.platforms }}
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
