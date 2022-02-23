@@ -8,5 +8,6 @@ RUN CGO_ENABLED=0 go build -o main -mod=vendor .
 FROM scratch
 
 COPY --from=Build /build/main /app/
+WORKDIR /app
 
-CMD ["/app/main"]
+CMD ["./main"]
