@@ -44,9 +44,10 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
+    environment:
+      name: Publish
     needs:
       - build
-
     steps:
       - name: Set up Go 1.17
         uses: actions/setup-go@v1
